@@ -3,6 +3,16 @@ const KEYS = {
   UP: 38,
   RIGHT: 39,
   DOWN: 40,
-}
+};
 
-export default KEYS;
+const MOVES = {
+  LEFT: 0,
+  UP: 1,
+  RIGHT: 2,
+  DOWN: 3,
+};
+
+export {
+  KEYS,
+  MOVES,
+};

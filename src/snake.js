@@ -1,18 +1,34 @@
-import Keys from "./utils";
+import { MOVES } from "./utils";
 
 class Snake {
-  constructor(snakeSize, boardWidth, boardHeight) {
-    this.snake = [...Array(snakeSize).keys()].map(x => {return {x: snakeSize-x, y: 0}});
+  constructor(snakeSize, tailPos, boardWidth, boardHeight) {
     this.maxX = boardWidth;
     this.maxY = boardHeight;
-    this.snakeLookup = new Set(this.snake.map(s => `${s.x}.${s.y}`));
     this.dx = 0;
     this.dy = 0;
     this.extendParts = 0;
+
+    this.snake = [];
+    this.snakeLookup = new Set();
+
+    this.addHead(tailPos);
+    while (this.snake.length < snakeSize) {
+      const state = Math.floor(Math.random() * 4);
+      const dx = [0, -1, 0, 1][state];
+      const dy = [1, 0, -1, 0][state];
+      const bodyPart = {x: this.snake[0].x + dx, y: this.snake[0].y + dy};
+      if (!this.checkCollision(bodyPart)) {
+        this.addHead(bodyPart);
+      }
+    }
   }
 
-  getPositions() {
-    return this.snake;
+  getPosition(idx) {
+    return this.snake[idx];
+  }
+
+  length() {
+    return this.snake.length;
   }
 
   removeTail() {
@@ -36,8 +52,8 @@ class Snake {
 
   setDirection(direction) {
     this.direction = direction;
-    this.dx = (this.direction === Keys.LEFT) ? -1 : (this.direction === Keys.RIGHT) ? 1 : 0;
-    this.dy = (this.direction === Keys.DOWN) ? -1 : (this.direction === Keys.UP) ? 1 : 0;
+    this.dx = (this.direction === MOVES.LEFT) ? -1 : (this.direction === MOVES.RIGHT) ? 1 : 0;
+    this.dy = (this.direction === MOVES.DOWN) ? -1 : (this.direction === MOVES.UP) ? 1 : 0;
   }
 
   moveSnake() {
